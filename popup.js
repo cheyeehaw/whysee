@@ -1,41 +1,68 @@
-// Skip popup on the embassy renunciation page
-if (window.location.href.startsWith("https://md.usembassy.gov/u-s-citizen-services/renounce-citizenship")) {
-    console.log("Popup disabled on this page.");
-  } else {
-    // Create overlay
+// Helper to create popup
+function createPopup(stepText, linkId, linkURL) {
     const overlay = document.createElement("div");
     overlay.className = "overlay";
   
     const popup = document.createElement("div");
     popup.className = "popup";
   
-    // Get image path from extension package
     const imgURL = chrome.runtime.getURL("labubu.png");
   
-    // Add image + link button
     popup.innerHTML = `
       <img src="${imgURL}" alt="Popup Character">
-      <p>You must click below to continue.</p>
-      <a id="continueLink" href="https://md.usembassy.gov/u-s-citizen-services/renounce-citizenship/?utm" target="_blank">Go</a>
+      <p><strong>FOUNDIGRANT TRACK</strong></p>
+      <p>${stepText}</p>
+      <a id="${linkId}" href="${linkURL}" target="_blank">Go</a>
     `;
   
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
   
-    // Style the link like a button
-    const linkBtn = popup.querySelector("#continueLink");
-    linkBtn.style.display = "inline-block";
-    linkBtn.style.padding = "0.5rem 1rem";
-    linkBtn.style.background = "#007bff";
-    linkBtn.style.color = "#fff";
-    linkBtn.style.borderRadius = "6px";
-    linkBtn.style.textDecoration = "none";
-    linkBtn.style.fontSize = "1rem";
-    linkBtn.style.cursor = "pointer";
+    return { overlay, linkBtn: document.getElementById(linkId) };
+  }
   
-    // When clicked, remove popup
-    linkBtn.addEventListener("click", () => {
-      overlay.remove();
+  // 🚫 Logic: Embassy page vs Flights page vs Booking page vs Everywhere else
+  const currentURL = window.location.href;
+  
+  if (
+    currentURL.startsWith("https://www.google.com/travel/flights/s/shfyTvZat1Qz5Ac2A")
+  ) {
+    // Specific flights page → no popup
+    console.log("Popup disabled on flights search page.");
+  } else if (currentURL.startsWith("https://www.google.com/travel/flights/booking")) {
+    // Any booking pages → no popup
+    console.log("Popup disabled on flights booking page.");
+  } else if (
+    currentURL.startsWith(
+      "https://md.usembassy.gov/u-s-citizen-services/renounce-citizenship"
+    )
+  ) {
+    // On embassy page → Step 2 popup after 10 seconds
+    setTimeout(() => {
+      const { overlay: overlay2, linkBtn: link2 } = createPopup(
+        "step 2: pack your bags",
+        "finalLink",
+        "https://www.google.com/travel/flights/s/shfyTvZat1Qz5Ac2A"
+      );
+  
+      link2.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.open(link2.href, "_blank");
+        overlay2.remove(); // close after click
+      });
+    }, 10000);
+  } else {
+    // On all other pages → Step 1 immediately
+    const { overlay: overlay1, linkBtn: link1 } = createPopup(
+      "step 1: denounce your citizenship",
+      "continueLink",
+      "https://md.usembassy.gov/u-s-citizen-services/renounce-citizenship/?utm"
+    );
+  
+    link1.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.open(link1.href, "_blank"); // open embassy page
+      overlay1.remove(); // close popup
     });
   }
   

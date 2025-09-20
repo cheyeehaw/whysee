@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "WHYSEE Popup",
+    "version": "1.0",
+    "description": "Show a blocking popup on all pages",
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["popup.js"],
+        "css": ["popup.css"]
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["labubu.png"],
+        "matches": ["<all_urls>"]
+      }
+    ]
+  }
+  

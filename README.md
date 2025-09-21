@@ -1,4 +1,4 @@
-See our full project code at: https://github.com/SinehaManivannan/WhySee
+This is the code for a small portion of our project. See our full project code at: https://github.com/SinehaManivannan/WhySee
 
 Check out our project at: https://whysee.netlify.app/
 

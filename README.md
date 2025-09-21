@@ -1,5 +1,7 @@
 See our full project code at: https://github.com/SinehaManivannan/WhySee
 
+Check out our project at: https://whysee.netlify.app/
+
 WhySee is the only (labaubau) trainer that takes you step-by-step into the perfect Founder Archetype. No detours, no “optional” paths — you pick a track and 100% commit until you embody the stereotype YC can’t say no to.
 
 👀 Sneak Peek:
